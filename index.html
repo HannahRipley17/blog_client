@@ -47,7 +47,10 @@
                                     <v-card elevation=10 class="pa-3 ma-2">
                                         <v-layout>
                                             <v-flex xs5>
-                                                <v-img v-bind:src="post.image"height=300 contain class="pa-0 align-items=top"></v-img>
+                                                <v-img v-bind:src="post.image"height=300 contain class="pa-0 align-items=top">
+                                                    
+                                                </v-img>
+                                                <v-btn icon class="bottom right" v-if="show_delete" @click="deletePost(post)"><v-icon>delete</v-icon></v-btn>
                                             </v-flex>
                                             <v-flex xs7>
                                                 <span class="headline text-uppercase">{{post.title}}</span>
@@ -55,6 +58,7 @@
                                                 <v-spacer></v-spacer>
                                                 <span>{{post.date}}</span><br><br>
                                                 <span>{{post.text}}</span>
+                                                
                                             </v-flex>
                                         </v-layout>      
                                     </v-card><br>

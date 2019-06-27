@@ -25,14 +25,42 @@ var app = new Vue ({
         new_post_category: "all",
         new_post_image: "",
         new_post_text: "",
+        
+        secret_keycode: "",
         server_url: "https://blog-hripley.herokuapp.com",
 	},
 
     created: function () {
         this.getPosts();
+        window.addEventListener("keyup", this.keyEvents);
     },
 
 	methods: {
+        keyEvents: function(event) {
+            console.log(event.which);
+            if (event.which == 68) {
+                if (this.secret_keycode == "") {
+                    this.secret_keycode = "D";
+                } else {
+                    this.secret_keycode = "";
+                }
+            } else if (event.which == 69) {
+                if (this.secret_keycode == "D") {
+                    this.secret_keycode = "DE";
+                } else {
+                    this.secret_keycode = "";
+                }
+            } else if (event.which == 76) {
+                if (this.secret_keycode == "DE") {
+                    this.secret_keycode = "DEL";
+                } 
+            }
+            else {
+                this.secret_keycode = "";
+            }
+            console.log(this.secret_keycode);
+        },
+
         getPosts: function () {
             fetch(this.server_url+"/posts").then(function(res){
                 res.json().then(function(data) {
@@ -78,6 +106,25 @@ var app = new Vue ({
                 });
                 return sorted_posts;
             }
+        },
+
+        show_delete: function() {
+            return this.secret_keycode == "DEL";
+        },
+
+        deletePost: function(post) {
+            fetch(`${this.server_url}/posts/${post._id}`, {
+                method: "DELETE"
+            }).then(function(response) {
+                if (response.status == 204) {
+                    console.log("it worked");
+                    app.getPosts();
+                } else if (response.status == 400) {
+                    response.json().then(function(data) {
+                        alert(data.msg);
+                    })
+                }
+            });
         }
 	},
 })
