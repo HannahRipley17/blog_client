@@ -94,6 +94,23 @@ var app = new Vue ({
             });
         },
 
+        deletePost: function(post) {
+            console.log(post.title);
+            console.log(post._id);
+            fetch(`${this.server_url}/posts/${post._id}`, {
+                method: "DELETE"
+            }).then(function(response) {
+                if (response.status == 204) {
+                    console.log("it worked");
+                    app.getPosts();
+                } else if (response.status == 400) {
+                    response.json().then(function(data) {
+                        alert(data.msg);
+                    })
+                }
+            });
+        }
+
 	},
 
 	computed: {
@@ -111,20 +128,5 @@ var app = new Vue ({
         show_delete: function() {
             return this.secret_keycode == "DEL";
         },
-
-        deletePost: function(post) {
-            fetch(`${this.server_url}/posts/${post._id}`, {
-                method: "DELETE"
-            }).then(function(response) {
-                if (response.status == 204) {
-                    console.log("it worked");
-                    app.getPosts();
-                } else if (response.status == 400) {
-                    response.json().then(function(data) {
-                        alert(data.msg);
-                    })
-                }
-            });
-        }
 	},
 })
