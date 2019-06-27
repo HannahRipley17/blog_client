@@ -25,6 +25,7 @@ var app = new Vue ({
         new_post_category: "all",
         new_post_image: "",
         new_post_text: "",
+        server_url: "https://blog-hripley.herokuapp.com",
 	},
 
     created: function () {
@@ -33,7 +34,7 @@ var app = new Vue ({
 
 	methods: {
         getPosts: function () {
-            fetch("http://localhost:3000/posts").then(function(res){
+            fetch(this.server_url+"/posts").then(function(res){
                 res.json().then(function(data) {
                     console.log(data);
                     app.posts = data.posts;
@@ -50,7 +51,7 @@ var app = new Vue ({
                 image: this.new_post_image,
                 text: this.new_post_text
             };
-            fetch("http://localhost:3000/posts", {
+            fetch(this.server_url+"/posts", {
                 method: "POST",
                 headers: {"Content-type":"application/json"},
                 body: JSON.stringify(new_post)
