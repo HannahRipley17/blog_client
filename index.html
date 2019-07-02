@@ -51,6 +51,7 @@
                                                     
                                                 </v-img>
                                                 <v-btn icon class="bottom right" v-if="show_delete" @click="deletePost(post)"><v-icon>delete</v-icon></v-btn>
+                                                <v-btn icon class="bottom right" @click="startEditing(post)"><v-icon>edit</v-icon></v-btn>
                                             </v-flex>
                                             <v-flex xs7>
                                                 <span class="headline text-uppercase">{{post.title}}</span>
@@ -58,7 +59,6 @@
                                                 <v-spacer></v-spacer>
                                                 <span>{{post.date}}</span><br><br>
                                                 <span>{{post.text}}</span>
-                                                
                                             </v-flex>
                                         </v-layout>      
                                     </v-card><br>
@@ -100,10 +100,41 @@
                             </v-flex>
                             <v-flex xs2></v-flex>
                         </v-layout>
-                    </v-container>
+                    </v-container>         
+                </div>
 
-
-                                
+                <div v-if="page == 'edit' ">
+                    <v-container fluid>
+                        <v-layout>
+                            <v-flex xs2></v-flex>
+                            <v-flex xs8 text-xs-center>
+                                <v-card class="pa-3 mt-2">
+                                    <div class="display-1 grey--text text--darken-2">Edit Post</div>
+                                    <v-text-field label="new post title" clearable v-model="update_title"></v-text-field>
+                                    <v-text-field label="author's name" clearable v-model="update_author"></v-text-field>
+                                    <v-flex > 
+                                        <v-select
+                                            :items="categories"
+                                            label="choose a category"
+                                            editable
+                                            item-value="text"
+                                            width=100
+                                            v-model="update_category">
+                                        </v-select>
+                                    </v-flex>
+                                    
+                                    <v-text-field label="link to image" clearable v-model="update_image"></v-text-field>
+                                    <v-textarea
+                                       name="blogtext"
+                                       label="describe your collection"
+                                       v-model="update_text">
+                                    </v-textarea>
+                                    <v-btn flat class="grey--text text--darken-2" @click="editPost(editing_post)">save this post</v-btn>
+                                </v-card>
+                            </v-flex>
+                            <v-flex xs2></v-flex>
+                        </v-layout>
+                    </v-container>         
                 </div>
 			</v-content>
 		</v-app>

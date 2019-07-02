@@ -27,7 +27,15 @@ var app = new Vue ({
         new_post_text: "",
         
         secret_keycode: "",
-        server_url: "https://blog-hripley.herokuapp.com",
+        server_url: "http://localhost:3000",
+        // server_url: "https://blog-hripley.herokuapp.com",
+
+        editing_post: "",
+        update_title: "",
+        update_author: "",
+        update_category: "",
+        update_image: "",
+        update_text: "",
 	},
 
     created: function () {
@@ -59,6 +67,16 @@ var app = new Vue ({
                 this.secret_keycode = "";
             }
             console.log(this.secret_keycode);
+        },
+
+        startEditing: function(post) {
+            this.page = "edit";
+            this.editing_post = post;
+            this.update_title = post.title;
+            this.update_author = post.author;
+            this.update_category = post.category;
+            this.update_image = post.image;
+            this.update_text = post.text;
         },
 
         getPosts: function () {
@@ -109,7 +127,31 @@ var app = new Vue ({
                     })
                 }
             });
-        }
+        },
+
+        editPost: function (post) {
+            var new_post = {
+                title: this.update_title,
+                author: this.update_author,
+                category: this.update_category,
+                date: new Date(),
+                image: this.update_image,
+                text: this.update_text
+            };
+            fetch(`${this.server_url}/posts/${post._id}`, {
+                method: "PUT",
+                headers: {"Content-type":"application/json"},
+                body: JSON.stringify(new_post)
+            }).then(function() {
+                app.update_title = "";
+                app.update_author = "";
+                app.update_category = "all";
+                app.update_image = "";
+                app.update_text = "";
+                app.getPosts();
+                app.page = "blog";
+            });
+        },
 
 	},
 
@@ -130,3 +172,5 @@ var app = new Vue ({
         },
 	},
 })
+
+//when you click edit it vmodels the post text (index probably) and sets the new input things to the vmodel
